@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PropertyRentalManagement.Models;
 using System.Diagnostics;
@@ -18,22 +17,6 @@ namespace PropertyRentalManagement.Controllers
         {
             return View();
         }
-
-      
-
-        [Authorize]
-        [HttpGet("GetUserDetails")]
-        public JsonResult GetSecuredDetails()
-        {
-            var result_user = new User
-            {
-                email = "ebengaurelien@gmail.com",
-                password = "12345678"
-            };
-
-            return Json(result_user);
-        }
-
 
         public IActionResult Privacy()
         {

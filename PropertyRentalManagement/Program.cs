@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using PropertyRentalManagement.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/home/error";
 });
+
+var connection = builder.Configuration.GetConnectionString("DBConnect");
+builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(connection));
+
 
 var app = builder.Build();
 

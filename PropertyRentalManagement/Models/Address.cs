@@ -9,5 +9,7 @@
 
         public string PostalCode { get; set; }
         public string Country { get; set; }
+
+        public Building? Building { get; set; }
     }
 }
