@@ -93,17 +93,23 @@ namespace PropertyRentalManagement.Controllers
         // GET: PropertyManagerAccount/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if(id != null)
             {
-                return NotFound();
+                var editUser = from u in _context.Users
+                               where u.Id == id
+                               select new EditUser
+                               {
+                                   Id = u.Id,
+                                   FirstName = u.FirstName,
+                                   LastName = u.LastName,
+                                   Email = u.Email,
+                                   Password = u.Password,
+                                   ConfirmPassword = u.Password
+                               };
+                return View(editUser.First());
             }
-
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
+            
+            return NotFound();
         }
 
         // POST: PropertyManagerAccount/Edit/5
@@ -111,15 +117,26 @@ namespace PropertyRentalManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Password,FirstName,LastName")] User user)
+        public async Task<IActionResult> Edit([Bind("Id,Email,Password,FirstName,LastName,ConfirmPassword")] EditUser editUser)
         {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
-
+            
+            
             if (ModelState.IsValid)
             {
+                var user = _context.Users.Where(u => u.Id == editUser.Id).FirstOrDefault();
+                if(user.Email != editUser.Email)
+                {
+                    var user2 = _context.Users.Where(u => u.Email == editUser.Email).FirstOrDefault();
+                    if (user2 != null)
+                    {
+                        ViewData["Error"] = "EmailTaken";
+                        return View(editUser);
+                    }
+
+                }
+                user.FirstName=editUser.FirstName;
+                user.LastName=editUser.LastName;
+                user.Password = editUser.Password;
                 try
                 {
                     _context.Update(user);
@@ -138,7 +155,7 @@ namespace PropertyRentalManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(editUser);
         }
 
         // GET: PropertyManagerAccount/Delete/5
