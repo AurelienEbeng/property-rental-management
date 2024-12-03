@@ -35,7 +35,10 @@ namespace PropertyRentalManagement.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.Email),
                     new Claim("FirstName", user.FirstName),
-                    new Claim(ClaimTypes.Role, userRole.Role.Name),
+                    new Claim("RoleId", ""+userRole.Role.Id),
+                    new Claim("RoleName", userRole.Role.Name),
+                    new Claim("UserId", ""+user.Id),
+                    new Claim("LastName", user.LastName),
                 };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

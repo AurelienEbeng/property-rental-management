@@ -1,9 +1,27 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
-    var currentUser = ViewData["currentUser"];
-    var currentClaim = ViewData["currentClaim"];
+    var email = ViewData["Email"];
+    var firstName = ViewData["FirstName"];
+    var lastName = ViewData["LastName"];
+    var roleName = ViewData["RoleName"];
 }
 
-<h2>CurrentUser:</h2>@currentUser
-<h2>Current Claim:</h2>@currentClaim
+
+
+<div class="container">
+    <h1 class="text-center">Profile</h1>
+    <div class="row justify-content-center">
+        <h3 class="col-sm-4">First Name:</h3> <h3 class="col-sm-4">@firstName</h3>
+    </div>
+    <div class="row justify-content-center">
+        <h3 class="col-sm-4">Last Name:</h3> <h3 class="col-sm-4">@lastName</h3>
+    </div>
+    <div class="row justify-content-center">
+        <h3 class="col-sm-4">Email:</h3> <h3 class="col-sm-4">@email</h3>
+    </div>
+    <div class="row justify-content-center">
+        <h3 class="col-sm-4">Role:</h3> <h3 class="col-sm-4">@roleName</h3>
+    </div>
+</div>
+

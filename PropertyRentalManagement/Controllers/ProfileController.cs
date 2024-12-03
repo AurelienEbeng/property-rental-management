@@ -9,8 +9,11 @@ namespace PropertyRentalManagement.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            ViewData["currentUser"] = HttpContext.User?.Identity?.Name;
-            ViewData["currentClaim"] = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value ;
+            ViewData["Email"] = HttpContext.User?.Identity?.Name;
+            ViewData["FirstName"] = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type=="FirstName")?.Value;
+            ViewData["LastName"] = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "LastName")?.Value;
+            ViewData["RoleName"] = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            ViewData["RoleId"] = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleId")?.Value;
             return View();
         }
     }
