@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PropertyRentalManagement.Context;
 using PropertyRentalManagement.Models;
+using PropertyRentalManagement.Requests;
 
 namespace PropertyRentalManagement.Controllers
 {
@@ -17,7 +18,6 @@ namespace PropertyRentalManagement.Controllers
         // GET: PropertyManagerAccount
         public async Task<IActionResult> Index()
         {
-            var users = _context.Users.ToList();
             var propertyManagers = from ur in _context.UserRoleMappings
                                    from r in _context.Roles
                                    from u in _context.Users
@@ -62,16 +62,33 @@ namespace PropertyRentalManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Email,Password,FirstName,LastName")] User user)
+        public async Task<IActionResult> Create([Bind("Id,Email,Password,FirstName,LastName,ConfirmPassword")] CreateUser createUserRequest)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var user = _context.Users.Where(u => createUserRequest.Email == u.Email).FirstOrDefault();
+                if (user != null)
+                {
+                    ViewData["Error"] = "EmailTaken";
+                    return View(createUserRequest);
+                }
+
+                _context.Add(new User() { Email=createUserRequest.Email, Password=createUserRequest.Password,FirstName=createUserRequest.FirstName, 
+                    LastName=createUserRequest.LastName});
+                await _context.SaveChangesAsync().ContinueWith(async task =>
+                {
+                    var createdUser = _context.Users.Where(u => u.FirstName==createUserRequest.FirstName && u.LastName==createUserRequest.LastName && 
+                                        u.Email==createUserRequest.Email).First();
+                    var role = _context.Roles.Where(p => p.Name == "PropertyManager").First();
+                    _context.Add(new UserRoleMappings() { RoleId = role.Id, UserId = createdUser.Id });
+                    await _context.SaveChangesAsync();
+                });
+                ViewData["Error"] = null;
+                return RedirectToAction(nameof(Index)); 
             }
-            return View(user);
+            return View(createUserRequest);
         }
+
 
         // GET: PropertyManagerAccount/Edit/5
         public async Task<IActionResult> Edit(int? id)
