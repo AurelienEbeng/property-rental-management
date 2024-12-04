@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PropertyRentalManagement.Context;
 using PropertyRentalManagement.Models;
+using PropertyRentalManagement.Requests;
 
 namespace PropertyRentalManagement.Controllers
 {
@@ -48,25 +49,79 @@ namespace PropertyRentalManagement.Controllers
         // GET: Apartments/Create
         public IActionResult Create()
         {
-            ViewData["BuildingId"] = new SelectList(_context.Buildings, "Id", "Id");
-            return View();
+            var createApartment = new CreateApartment();
+            createApartment.ServicesIncludedCheckboxes = GetServicesIncludedCheckboxes();
+            createApartment.EquipmentsIncludedCheckboxes = GetEquipmentsIncludedCheckboxes();
+            createApartment.OutdoorSpacesCheckboxes = GetOutdoorSpacesCheckboxes();
+            createApartment.BuildingSelectItems = GetBuildingSelectItems();
+
+            createApartment.ServicesIncluded = new List<string>();
+            createApartment.EquipmentsIncluded = new List<string>();
+            createApartment.OutdoorSpaces = new List<string>();
+
+            return View(createApartment);
         }
 
-        // POST: Apartments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BuildingId,Rooms,Size,FloorNumber,ApartmentNumber,IsVacant")] Apartment apartment)
+        private List<CheckBoxOption> GetEquipmentsIncludedCheckboxes()
         {
-            if (ModelState.IsValid)
+            var items = _context.EquipmentsIncluded.ToList();
+            List<CheckBoxOption> checkboxes = new List<CheckBoxOption>();
+            foreach (var item in items)
             {
-                _context.Add(apartment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                checkboxes.Add(new CheckBoxOption { Description = item.Name, IsChecked = false, Value = "" + item.Id });
             }
-            ViewData["BuildingId"] = new SelectList(_context.Buildings, "Id", "Id", apartment.BuildingId);
-            return View(apartment);
+            return checkboxes;
+        }
+
+        private List<CheckBoxOption> GetOutdoorSpacesCheckboxes()
+        {
+            var items = _context.OutdoorSpaces.ToList();
+            List<CheckBoxOption> checkboxes = new List<CheckBoxOption>();
+            foreach (var item in items)
+            {
+                checkboxes.Add(new CheckBoxOption { Description = item.Name, IsChecked = false, Value = "" + item.Id });
+            }
+            return checkboxes;
+        }
+
+        private List<CheckBoxOption> GetServicesIncludedCheckboxes()
+        {
+            var items = _context.ServicesIncluded.ToList();
+            List<CheckBoxOption> checkboxes = new List<CheckBoxOption>();
+            foreach (var item in items)
+            {
+                checkboxes.Add(new CheckBoxOption { Description = item.Name, IsChecked = false, Value = "" + item.Id });
+            }
+            return checkboxes;
+        }
+
+        private List<SelectListItem> GetBuildingSelectItems()
+        {
+            var items = _context.Buildings.ToList();
+
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            foreach (var item in items)
+            {
+                listItems.Add(new SelectListItem { Text = item.Id+"", Value = "" + item.Id });
+            }
+
+            return listItems;
+        }
+
+
+    
+
+    [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateApartment createApartment)
+        {
+            createApartment.ServicesIncludedCheckboxes = GetServicesIncludedCheckboxes();
+            createApartment.EquipmentsIncludedCheckboxes = GetEquipmentsIncludedCheckboxes();
+            createApartment.OutdoorSpacesCheckboxes = GetOutdoorSpacesCheckboxes();
+            createApartment.BuildingSelectItems = GetBuildingSelectItems();
+
+            
+            return View(createApartment);
         }
 
         // GET: Apartments/Edit/5

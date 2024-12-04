@@ -1,29 +1,29 @@
-﻿@model PropertyRentalManagement.Models.Apartment
+﻿@model PropertyRentalManagement.Requests.CreateApartment
 
-@{
-    ViewData["Title"] = "Create";
-}
 
-<h1>Create</h1>
 
-<h4>Apartment</h4>
+<h1>Create Apartment</h1>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="BuildingId" class="control-label"></label>
-                <select asp-for="BuildingId" class ="form-control" asp-items="ViewBag.BuildingId"></select>
+                <label class="control-label">Rooms</label>
+                <select asp-for="Rooms">
+                    <option>Please select one</option>
+                    <option>1 1/2</option>
+                    <option>2 1/2</option>
+                    <option>3 1/2</option>
+                    <option>4 1/2</option>
+                    <option>5 1/2</option>
+                    <option>6 1/2</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Rooms" class="control-label"></label>
-                <input asp-for="Rooms" class="form-control" />
-                <span asp-validation-for="Rooms" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
+                <label asp-for="Size" class="control-label">Size(ft)</label>
+                <input asp-for="Size" class="form-control" type="number" max="10000"/>
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -41,6 +41,50 @@
                     <input class="form-check-input" asp-for="IsVacant" /> @Html.DisplayNameFor(model => model.IsVacant)
                 </label>
             </div>
+
+
+            <div class="form-group">
+                <label>Equipments Included(select all that apply)</label>
+                @foreach (var checkbox in Model.EquipmentsIncludedCheckboxes)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="@checkbox.Value" name="EquipmentsIncluded"
+                               id="checkbox_equipments_@checkbox.Value" checked="@checkbox.IsChecked" />
+                        <label class="form-check-lablel" for="checkbox_@checkbox.Value">@checkbox.Description</label>
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Outdoor Space(select all that apply)</label>
+                @foreach (var checkbox in Model.OutdoorSpacesCheckboxes)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="@checkbox.Value" name="OutdoorSpaces"
+                               id="checkbox_outdoor_@checkbox.Value" checked="@checkbox.IsChecked" />
+                        <label class="form-check-lablel" for="checkbox_@checkbox.Value">@checkbox.Description</label>
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Services Included(select all that apply)</label>
+                @foreach (var checkbox in Model.ServicesIncludedCheckboxes)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="@checkbox.Value" name="ServicesIncluded"
+                               id="checkbox_services_@checkbox.Value" checked="@checkbox.IsChecked" />
+                        <label class="form-check-lablel" for="checkbox_@checkbox.Value">@checkbox.Description</label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label class="control-label">Building</label>
+                <select asp-for="BuildingId" asp-items="@Model.BuildingSelectItems">
+                    <option>Please select one</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -52,3 +96,23 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<div>
+    @foreach(var item in Model.EquipmentsIncluded)
+    {
+        <p>@item</p>
+    }
+</div>
+
+<div>
+    @foreach (var item in Model.ServicesIncluded)
+    {
+        <p>@item</p>
+    }
+</div>
+
+<div>
+    @foreach (var item in Model.OutdoorSpaces)
+    {
+        <p>@item</p>
+    }
+</div>
