@@ -1,6 +1,10 @@
 ﻿@model PropertyRentalManagement.Requests.CreateApartment
 
-
+@{
+    var error = ViewData["Error"];
+    var floorExceededError = ViewData["FloorExceeded"];
+    var apartmentExceededError = ViewData["ApartmentsExceeded"];
+}
 
 <h1>Create Apartment</h1>
 
@@ -30,11 +34,20 @@
                 <label asp-for="FloorNumber" class="control-label">Floor Number</label>
                 <input asp-for="FloorNumber" class="form-control" />
                 <span asp-validation-for="FloorNumber" class="text-danger"></span>
+                @if (@floorExceededError != null)
+                {
+                    <span style="background-color:red">The building has less floors</span>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="ApartmentNumber" class="control-label"> Apartment Number</label>
                 <input asp-for="ApartmentNumber" class="form-control" />
                 <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
+                @if(@error!=null){<span style="background-color:red">Appartment exist in choosen building</span>}
+                @if (apartmentExceededError != null)
+                {
+                    <span style="background-color:red">The building has less apartments</span>
+                }
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
