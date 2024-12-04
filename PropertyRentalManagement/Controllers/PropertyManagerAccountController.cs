@@ -181,9 +181,11 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = _context.Users.Where(u => u.Id==id).FirstOrDefault();
+            var userRole = _context.UserRoleMappings.Where(u => u.UserId == user.Id).FirstOrDefault();
             if (user != null)
             {
+                _context.UserRoleMappings.Remove(userRole);
                 _context.Users.Remove(user);
             }
 
