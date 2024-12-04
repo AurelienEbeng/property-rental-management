@@ -71,7 +71,7 @@ namespace PropertyRentalManagement.Controllers
                     await _context.SaveChangesAsync();
                 });
                 ViewData["Error"] = null;
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Login", "Account");
             }
             return View(createUserRequest);
         }
