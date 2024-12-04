@@ -12,7 +12,7 @@ using PropertyRentalManagement.Context;
 namespace PropertyRentalManagement.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241202224044_InitialMigration")]
+    [Migration("20241204213945_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

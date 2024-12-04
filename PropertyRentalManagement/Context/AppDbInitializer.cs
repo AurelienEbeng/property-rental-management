@@ -81,8 +81,7 @@ namespace PropertyRentalManagement.Context
                         new ServiceIncluded(){ Name="Heating"},
                         new ServiceIncluded(){ Name="Water"},
                         new ServiceIncluded(){ Name="Wi-Fi"},
-                        new ServiceIncluded(){ Name="Parking"},
-                        new ServiceIncluded(){ Name="None"}
+                        new ServiceIncluded(){ Name="Parking"}
                     });
                     context.SaveChanges();
                 }
@@ -98,7 +97,6 @@ namespace PropertyRentalManagement.Context
                         new AmenitiesInBuilding(){ Name="Elevator"},
                         new AmenitiesInBuilding(){ Name="Laundry Room"},
                         new AmenitiesInBuilding(){ Name="Bar"},
-                        new AmenitiesInBuilding(){ Name="None"},
                     });
                     context.SaveChanges();
                 }
@@ -114,7 +112,6 @@ namespace PropertyRentalManagement.Context
                         new AmenitiesNearby(){ Name="Highway Access"},
                         new AmenitiesNearby(){ Name="Public Transportation"},
                         new AmenitiesNearby(){ Name="Hospital"},
-                        new AmenitiesNearby(){ Name="None"},
                     });
                     context.SaveChanges();
                 }
@@ -131,7 +128,16 @@ namespace PropertyRentalManagement.Context
                         new EquipmentIncluded(){ Name="Window Coverings"},
                         new EquipmentIncluded(){ Name="Dryer"},
                         new EquipmentIncluded(){ Name="Ventilator"},
-                        new EquipmentIncluded(){ Name="None"},
+                    });
+                    context.SaveChanges();
+                }
+
+                if (!context.OutdoorSpaces.Any())
+                {
+                    context.OutdoorSpaces.AddRange(new List<OutdoorSpace>()
+                    {
+                        new OutdoorSpace(){ Name="Garden"},
+                        new OutdoorSpace(){ Name="Balcony"},
                     });
                     context.SaveChanges();
                 }
