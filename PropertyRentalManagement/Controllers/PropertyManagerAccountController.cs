@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PropertyRentalManagement.Context;
 using PropertyRentalManagement.Models;
@@ -6,6 +7,7 @@ using PropertyRentalManagement.Requests;
 
 namespace PropertyRentalManagement.Controllers
 {
+    [Authorize]
     public class PropertyManagerAccountController : Controller
     {
         private readonly ApplicationDBContext _context;
@@ -18,6 +20,11 @@ namespace PropertyRentalManagement.Controllers
         // GET: PropertyManagerAccount
         public async Task<IActionResult> Index()
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             var propertyManagers = from ur in _context.UserRoleMappings
                                    from r in _context.Roles
                                    from u in _context.Users
@@ -36,6 +43,12 @@ namespace PropertyRentalManagement.Controllers
         // GET: PropertyManagerAccount/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -54,6 +67,12 @@ namespace PropertyRentalManagement.Controllers
         // GET: PropertyManagerAccount/Create
         public IActionResult Create()
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             return View();
         }
 
@@ -64,6 +83,12 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Email,Password,FirstName,LastName,ConfirmPassword")] CreateUser createUserRequest)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = _context.Users.Where(u => createUserRequest.Email == u.Email).FirstOrDefault();
@@ -93,7 +118,13 @@ namespace PropertyRentalManagement.Controllers
         // GET: PropertyManagerAccount/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if(id != null)
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
+            if (id != null)
             {
                 var editUser = from u in _context.Users
                                where u.Id == id
@@ -119,8 +150,12 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([Bind("Id,Email,Password,FirstName,LastName,ConfirmPassword")] EditUser editUser)
         {
-            
-            
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = _context.Users.Where(u => u.Id == editUser.Id).FirstOrDefault();
@@ -161,6 +196,12 @@ namespace PropertyRentalManagement.Controllers
         // GET: PropertyManagerAccount/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -181,6 +222,12 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             var user = _context.Users.Where(u => u.Id==id).FirstOrDefault();
             var userRole = _context.UserRoleMappings.Where(u => u.UserId == user.Id).FirstOrDefault();
             if (user != null)

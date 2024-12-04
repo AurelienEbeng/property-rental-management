@@ -13,7 +13,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.Cookie.Name = "PropertyRentalManagement";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
     options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/home/error";
+    options.AccessDeniedPath = "/Account/Unauthorized";
 });
 
 var connection = builder.Configuration.GetConnectionString("DBConnect");
