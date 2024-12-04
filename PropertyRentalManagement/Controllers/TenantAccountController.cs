@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PropertyRentalManagement.Context;
 using PropertyRentalManagement.Models;
@@ -6,6 +7,7 @@ using PropertyRentalManagement.Requests;
 
 namespace PropertyRentalManagement.Controllers
 {
+    [Authorize]
     public class TenantAccountController : Controller
     {
         private readonly ApplicationDBContext _context;
