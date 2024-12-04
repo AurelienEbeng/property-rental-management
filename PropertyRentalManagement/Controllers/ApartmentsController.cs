@@ -318,9 +318,27 @@ namespace PropertyRentalManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var apartment = await _context.Apartments.FindAsync(id);
+            var outdoorMappings = _context.ApartmentOutdoorSpaceMappings.Where(a=>a.ApartmentId==apartment.Id).ToList();
+            var serviceMappings = _context.ApartmentServiceIncludedMappings.Where(a => a.ApartmentId == apartment.Id).ToList();
+            var equipmentsMappings = _context.ApartmentEquipmentsIncludedMappings.Where(a => a.ApartmentId == apartment.Id).ToList();
             if (apartment != null)
             {
                 _context.Apartments.Remove(apartment);
+            }
+
+            if (outdoorMappings != null)
+            {
+                _context.ApartmentOutdoorSpaceMappings.RemoveRange(outdoorMappings);
+            }
+
+            if (serviceMappings != null)
+            {
+                _context.ApartmentServiceIncludedMappings.RemoveRange(serviceMappings);
+            }
+
+            if (equipmentsMappings != null)
+            {
+                _context.ApartmentEquipmentsIncludedMappings.RemoveRange(equipmentsMappings);
             }
 
             await _context.SaveChangesAsync();
