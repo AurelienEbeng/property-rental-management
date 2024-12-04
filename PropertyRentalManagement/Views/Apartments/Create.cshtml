@@ -7,7 +7,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Rooms</label>
@@ -27,12 +27,12 @@
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FloorNumber" class="control-label"></label>
+                <label asp-for="FloorNumber" class="control-label">Floor Number</label>
                 <input asp-for="FloorNumber" class="form-control" />
                 <span asp-validation-for="FloorNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ApartmentNumber" class="control-label"></label>
+                <label asp-for="ApartmentNumber" class="control-label"> Apartment Number</label>
                 <input asp-for="ApartmentNumber" class="form-control" />
                 <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
             </div>
@@ -94,25 +94,4 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
-</div>
-
-<div>
-    @foreach(var item in Model.EquipmentsIncluded)
-    {
-        <p>@item</p>
-    }
-</div>
-
-<div>
-    @foreach (var item in Model.ServicesIncluded)
-    {
-        <p>@item</p>
-    }
-</div>
-
-<div>
-    @foreach (var item in Model.OutdoorSpaces)
-    {
-        <p>@item</p>
-    }
 </div>

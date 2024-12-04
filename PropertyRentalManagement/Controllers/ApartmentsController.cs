@@ -55,9 +55,6 @@ namespace PropertyRentalManagement.Controllers
             createApartment.OutdoorSpacesCheckboxes = GetOutdoorSpacesCheckboxes();
             createApartment.BuildingSelectItems = GetBuildingSelectItems();
 
-            createApartment.ServicesIncluded = new List<string>();
-            createApartment.EquipmentsIncluded = new List<string>();
-            createApartment.OutdoorSpaces = new List<string>();
 
             return View(createApartment);
         }
