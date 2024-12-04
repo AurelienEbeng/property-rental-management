@@ -17,6 +17,11 @@ namespace PropertyRentalManagement.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             var tenants = from ur in _context.UserRoleMappings
                           from r in _context.Roles
                           from u in _context.Users
@@ -73,6 +78,11 @@ namespace PropertyRentalManagement.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             if (id != null)
             {
                 var editUser = from u in _context.Users
@@ -96,7 +106,11 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([Bind("Id,Email,Password,FirstName,LastName,ConfirmPassword")] EditUser editUser)
         {
-
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
 
             if (ModelState.IsValid)
             {
@@ -143,6 +157,11 @@ namespace PropertyRentalManagement.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -163,6 +182,12 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "Owner")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             var user = _context.Users.Where(u => u.Id == id).FirstOrDefault();
             var userRole = _context.UserRoleMappings.Where(u => u.UserId == user.Id).FirstOrDefault();
             if (user != null)
