@@ -1,7 +1,6 @@
 ﻿@model PropertyRentalManagement.Requests.CreateUser
 
 @{
-    ViewData["Title"] = "Create";
     var error = ViewData["Error"];
 }
 
@@ -30,13 +29,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" id="Password" onchange="checkCreateUser()" 
+                <input asp-for="Password" class="form-control" id="Password" onchange="checkCreateUser()" type="password"
                     placeholder="Password must be at least 8 characters"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" id="ConfirmPassword" onchange="checkCreateUser()" />
+                <input asp-for="ConfirmPassword" class="form-control" id="ConfirmPassword" onchange="checkCreateUser()" type="password" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group row align-items-center">
