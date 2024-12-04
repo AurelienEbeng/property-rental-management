@@ -18,3 +18,13 @@ var checkCreateUser = function () {
         document.getElementById('Submit').disabled = false;
     }
 }
+
+
+var checkCreateBuilding = function () {
+    if (/^([A-Z][0-9]){3}$/.test(document.getElementById('PostalCode').value) == false) {
+        document.getElementById('Submit').disabled = true;
+    }
+    else {
+        document.getElementById('Submit').disabled = false
+    }
+}
