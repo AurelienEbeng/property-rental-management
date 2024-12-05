@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +8,7 @@ using PropertyRentalManagement.Requests;
 
 namespace PropertyRentalManagement.Controllers
 {
+    [Authorize]
     public class ApartmentsController : Controller
     {
         private readonly ApplicationDBContext _context;
@@ -24,6 +21,11 @@ namespace PropertyRentalManagement.Controllers
         // GET: Apartments
         public async Task<IActionResult> Index()
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             var applicationDBContext = _context.Apartments.Include(a => a.Building);
             return View(await applicationDBContext.ToListAsync());
         }
@@ -31,6 +33,11 @@ namespace PropertyRentalManagement.Controllers
         // GET: Apartments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -50,6 +57,12 @@ namespace PropertyRentalManagement.Controllers
         // GET: Apartments/Create
         public IActionResult Create()
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             var createApartment = new CreateApartment();
             createApartment.ServicesIncludedCheckboxes = GetServicesIncludedCheckboxes();
             createApartment.EquipmentsIncludedCheckboxes = GetEquipmentsIncludedCheckboxes();
@@ -102,19 +115,24 @@ namespace PropertyRentalManagement.Controllers
             List<SelectListItem> listItems = new List<SelectListItem>();
             foreach (var item in items)
             {
-                listItems.Add(new SelectListItem { Text = item.Id+"", Value = "" + item.Id });
+                listItems.Add(new SelectListItem { Text = item.Id + "", Value = "" + item.Id });
             }
 
             return listItems;
         }
 
 
-    
 
-    [HttpPost]
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateApartment createApartment)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             createApartment.ServicesIncludedCheckboxes = GetServicesIncludedCheckboxes();
             createApartment.EquipmentsIncludedCheckboxes = GetEquipmentsIncludedCheckboxes();
             createApartment.OutdoorSpacesCheckboxes = GetOutdoorSpacesCheckboxes();
@@ -124,16 +142,16 @@ namespace PropertyRentalManagement.Controllers
             ViewData["ApartmentsExceeded"] = null;
 
             var oldApartment = _context.Apartments.Where(a => a.ApartmentNumber == createApartment.ApartmentNumber &&
-                                                    a.BuildingId==createApartment.BuildingId).FirstOrDefault();
+                                                    a.BuildingId == createApartment.BuildingId).FirstOrDefault();
             if (oldApartment != null)
             {
                 ViewData["Error"] = "Taken";
                 return View(createApartment);
             }
 
-            var building = _context.Buildings.Where(b => b.Id ==createApartment.BuildingId).FirstOrDefault();
+            var building = _context.Buildings.Where(b => b.Id == createApartment.BuildingId).FirstOrDefault();
 
-            if(createApartment.FloorNumber > building.NumberOfFloors)
+            if (createApartment.FloorNumber > building.NumberOfFloors)
             {
                 ViewData["FloorExceeded"] = "Yes";
                 return View(createApartment);
@@ -191,9 +209,9 @@ namespace PropertyRentalManagement.Controllers
         private List<ApartmentEquipmentsIncludedMappings> GetListOfEquipmentsMappings(List<string> items, int apartmentId)
         {
             List<ApartmentEquipmentsIncludedMappings> mappings = new List<ApartmentEquipmentsIncludedMappings>();
-            foreach(var item in items)
+            foreach (var item in items)
             {
-                mappings.Add(new ApartmentEquipmentsIncludedMappings() 
+                mappings.Add(new ApartmentEquipmentsIncludedMappings()
                 { ApartmentId = apartmentId, EquipmentIncludedId = Int32.Parse(item) });
             }
 
@@ -243,6 +261,11 @@ namespace PropertyRentalManagement.Controllers
         // GET: Apartments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -264,6 +287,12 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BuildingId,Rooms,Size,FloorNumber,ApartmentNumber,IsVacant")] Apartment apartment)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             if (id != apartment.Id)
             {
                 return NotFound();
@@ -296,6 +325,12 @@ namespace PropertyRentalManagement.Controllers
         // GET: Apartments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -317,8 +352,14 @@ namespace PropertyRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
+            if (role != "Admin" && role != "PropertyManager")
+            {
+                return RedirectToAction("Unauthorized", "Account");
+            }
+
             var apartment = await _context.Apartments.FindAsync(id);
-            var outdoorMappings = _context.ApartmentOutdoorSpaceMappings.Where(a=>a.ApartmentId==apartment.Id).ToList();
+            var outdoorMappings = _context.ApartmentOutdoorSpaceMappings.Where(a => a.ApartmentId == apartment.Id).ToList();
             var serviceMappings = _context.ApartmentServiceIncludedMappings.Where(a => a.ApartmentId == apartment.Id).ToList();
             var equipmentsMappings = _context.ApartmentEquipmentsIncludedMappings.Where(a => a.ApartmentId == apartment.Id).ToList();
             if (apartment != null)
