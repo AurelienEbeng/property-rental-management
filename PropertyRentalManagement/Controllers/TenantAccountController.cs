@@ -7,7 +7,7 @@ using PropertyRentalManagement.Requests;
 
 namespace PropertyRentalManagement.Controllers
 {
-    [Authorize]
+    
     public class TenantAccountController : Controller
     {
         private readonly ApplicationDBContext _context;
@@ -17,6 +17,7 @@ namespace PropertyRentalManagement.Controllers
             _context = context;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
@@ -78,6 +79,7 @@ namespace PropertyRentalManagement.Controllers
             return View(createUserRequest);
         }
 
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
@@ -104,6 +106,7 @@ namespace PropertyRentalManagement.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([Bind("Id,Email,Password,FirstName,LastName,ConfirmPassword")] EditUser editUser)
@@ -156,7 +159,7 @@ namespace PropertyRentalManagement.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
 
-
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             var role = HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == "RoleName")?.Value;
@@ -179,7 +182,7 @@ namespace PropertyRentalManagement.Controllers
             return View(user);
         }
 
-
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
