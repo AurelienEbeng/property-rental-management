@@ -1,0 +1,39 @@
+﻿
+<h1>Apartment Details</h1>
+
+
+<p>Title: @ViewBag.listing.Title</p>
+<p>Description: @ViewBag.listing.Description</p>
+<p>Lease Duration: @ViewBag.listing.LeaseDuration</p>
+<p>Are Pets Allowed: @ViewBag.listing.ArePetsAllowed</p>
+<p>Is Smoking Allowed: @ViewBag.listing.IsSmokingAllowed</p>
+<p>Price: @ViewBag.listing.Price</p>
+<p>Available From: @ViewBag.listing.AvailableFrom</p>
+<h4>Equipments Included</h4>
+@foreach (var item in ViewBag.equipments)
+{
+	<p>@item.Name</p>
+}
+<h4>Outdoor Space</h4>
+@foreach (var item in ViewBag.outdoorSpace)
+{
+	<p>@item.Name</p>
+}
+
+<h4>Services Included</h4>
+@foreach (var item in ViewBag.services)
+{
+	<p>@item.Name</p>
+}
+<h4>Amenities Near by</h4>
+@foreach (var item in ViewBag.amenitiesNearby)
+{
+	<p>@item.Name</p>
+}
+
+
+<h4>Amenities in Building</h4>
+@foreach (var item in ViewBag.amenitiesInBuilding)
+{
+	<p>@item.Name</p>
+}
