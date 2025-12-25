@@ -1,0 +1,23 @@
+Functional Requirements
+- The system shall allow users to register, log in, and log out.
+- The system shall allow users to view available apartments.
+- The system shall allow users to view their own profile.
+- The system shall allow administrators to view all property managers.
+- The system shall allow administrators to view property manager profiles.
+- The system shall allow administrators to view all tenants.
+- The system shall allow administrators to view tenant profiles.
+- The system shall allow administrators to view all buildings and their associated properties.
+- The system shall allow administrators to modify building properties.
+- The system shall allow administrators to view all apartments.
+- The system shall allow administrators to view apartment details.
+- The system shall allow administrators and property managers to view all listings.
+- The system shall allow administrators to modify listings.
+- The system shall allow property managers to view buildings and their associated properties.
+- The system shall allow administrators and property managers to create buildings.
+- The system shall allow property managers to view apartments and their associated properties.
+- The system shall allow administrators and property managers to create apartments.
+- The system shall allow administrators and property managers to create, update, and delete listings.
+- The system shall allow owners to view all property managers and tenants.
+- The system shall allow owners to create, update, and delete property managers.
+- The system shall allow owners to create, update, and delete tenants.
+- The system shall use cookie-based authentication, with cookies expiring after five minutes.
