@@ -38,3 +38,6 @@
 - The system shall allow owners to view all property managers and tenants in the system.
 - The system shall allow owners to create, edit, and delete property manager accounts.
 - The system shall allow owners to create, edit, and delete tenant accounts.
+
+# Entity Relationship Diagram
+<img width="945" height="779" alt="image" src="https://github.com/user-attachments/assets/b4aa3fdf-f058-4c89-8463-73dea9980ce5" />
