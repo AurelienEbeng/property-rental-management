@@ -27,7 +27,8 @@
 ## Property Manager Capabilities
 - The system shall allow property managers to view buildings and their associated properties.
 - The system shall allow property managers to view apartments and their associated properties.
-- Building & Apartment Management
+
+## Building & Apartment Management
 - The system shall allow administrators and property managers to create buildings.
 - The system shall allow administrators and property managers to create apartments.
 
